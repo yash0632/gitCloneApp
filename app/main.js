@@ -43,18 +43,18 @@ function getBlob(shadb,shafile){
         console.log("an error occured");
         process.exit(1);
       }
-      const data = buffer.toString();
+      let data = buffer.toString();
+      data = data.replace("\x00","|")
       let index = 0;
       for(let i = 0;i < data.length;i++){
-        if(data[i] == 'x'){
+        if(data[i] == '|'){
             index = i;
             break;
         }
       }
-      console.log(data);
       
       let correctData = data.substring(index+1,data.length);
-      correctData=correctData.replace("\x00","")
+      
       process.stdout.write(correctData);
     })
   }
