@@ -54,7 +54,7 @@ function getBlob(shadb,shafile){
       console.log(data);
       
       let correctData = data.substring(index+1,data.length);
-      correctData=correctData.replace("/\x00/","")
+      correctData=correctData.replace("\x00","")
       process.stdout.write(correctData);
     })
   }
