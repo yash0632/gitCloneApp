@@ -7,7 +7,7 @@ console.error("Logs from your program will appear here!");
 
 // Uncomment this block to pass the first stage
 const command = process.argv[2];
-console.log("command: ",command);
+console.log("command:  ",command);
 
 switch (command) {
   case "init":
