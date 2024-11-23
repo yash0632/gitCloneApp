@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const zlib = require("zlib")
+const bcrypt = require("bcrypt")
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 console.error("Logs from your program will appear here!");
@@ -21,6 +22,9 @@ switch (command) {
     let shafile = sha.substring(2,sha.length);
     getBlob(shadb,shafile);
     break;
+
+    case "hash-object":
+        getHashObject();
 
   default:
     throw new Error(`Unknown command ${command}`);
@@ -58,3 +62,28 @@ function getBlob(shadb,shafile){
       process.stdout.write(correctData);
     })
   }
+
+async function getHashObject(){
+    const write = process.argv[3];
+    if(write != "-w"){
+        throw new Error(`Unknown Command ${write}`)
+        
+    }
+    const fileName = process.argv[4];
+    const fileData = fs.readFileSync(path.join(process.cwd(),fileName));
+    const size = fileData.BYTES_PER_ELEMENT;
+
+    const gitData = `blob ${size}\0${fileData.toString()}`;
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    let hashedGitFileName = await bcrypt.hash(gitData,salt);
+    hashedGitFileName = hashedGitFileName.substring(0,40);
+    
+
+    var compressedData = zlib.deflateSync(gitData).toString();
+    fs.writeFileSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName(2,40)),compressedData);
+
+
+    process.stdout.write(hashedGitFileName);
+
+}

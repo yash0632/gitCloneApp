@@ -11,5 +11,7 @@
     ],
     "author": "",
     "license": "MIT",
-    "dependencies": {}
+    "dependencies": {
+        "bcrypt": "^5.1.1"
+    }
 }
