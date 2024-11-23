@@ -84,6 +84,7 @@ async function getHashObject(){
 
     var compressedData = zlib.deflateSync(gitData).toString();
     console.log(__dirname);
+    const pathDir = path.dirname(__dirname)
     
     fs.writeFileSync(path.join(pathDir,".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName.substring(2,40)),compressedData);
 
