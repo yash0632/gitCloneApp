@@ -7,7 +7,7 @@ console.error("Logs from your program will appear here!");
 
 // Uncomment this block to pass the first stage
 const command = process.argv[2];
-console.log("command:  ",command);
+//console.log("command:  ",command);
 
 switch (command) {
   case "init":
@@ -16,7 +16,7 @@ switch (command) {
 
   case "cat-file":
     const sha = process.argv[4];
-    console.log("sha is",sha);
+    //console.log("sha is",sha);
     let shadb = sha.substring(0,2);
     let shafile = sha.substring(2,sha.length);
     getBlob(shadb,shafile);
