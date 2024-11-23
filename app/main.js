@@ -51,7 +51,7 @@ function getBlob(shadb,shafile){
             break;
         }
       }
-
+      console.log(data);
       const correctData = data.substring(index+4,data.length);
       process.stdout.write(correctData);
     })
