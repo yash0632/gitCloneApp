@@ -24,7 +24,9 @@ switch (command) {
     break;
 
     case "hash-object":
+        console.log("herererere")
         getHashObject();
+        break;
 
   default:
     throw new Error(`Unknown command ${command}`);
