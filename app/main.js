@@ -112,7 +112,7 @@ async function getHashObject(){
         }
         let data = buffer.toString();
         console.log(data)
-    })
+      })
 
     
     //console.log(__dirname);
@@ -120,5 +120,6 @@ async function getHashObject(){
     
     //console.log(process.cwd());
     //console.log(path.dirname(path.dirname(process.cwd())))
+  })
 
 }
