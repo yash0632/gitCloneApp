@@ -77,7 +77,7 @@ async function getHashObject(){
     const fileData = fs.readFileSync(path.join(process.cwd(),fileName));
     const size = fileData.BYTES_PER_ELEMENT;
 
-    const gitData = `blob ${size}\x00${fileData.toString()}`;
+    const gitData = `blob ${size}\0${fileData.toString()}`;
     
     let hashedGitFileName = crypto.createHash("sha1").update(gitData).digest("hex");
     
