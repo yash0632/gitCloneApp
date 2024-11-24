@@ -93,7 +93,7 @@ async function getHashObject(){
         console.error('An error occurred:', err);
         process.exitCode = 1;
       }
-      compressedData = buffer.toString()
+      compressedData = buffer.toString('base64')
     })
 
     
