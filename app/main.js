@@ -138,7 +138,7 @@ function getLsTree(){
       if(take == true){
         treeFileName = treeFileName + content[i];
       }
-      if(content[i] == "$" && content[i-1] == "$"){
+      if(content[i] == "#" && content[i-1] == "&"){
         take = true;
         arr.push(i);
       }
