@@ -141,8 +141,8 @@ function getLsTree(){
 
 
     for(let i = 0;i < arr.length;i+=2){
-      treeFileName=content.substring(i,i+1);
-      treeFileName += "/n"
+      treeFileName =treeFileName + content.substring(i,i+1);
+      treeFileName = treeFileName + "/n"
     }
 
     process.stdout.write(treeFileName);
