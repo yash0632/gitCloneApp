@@ -116,7 +116,7 @@ function getLsTree(){
     }
     content = buffer.toString();
 
-    console.log(content);
+    //console.log(content);
 
     let treeFileName = "";
     content = content.replaceAll("\x0040000 ","#&");
@@ -129,7 +129,7 @@ function getLsTree(){
     content = content.replaceAll("\x00120000 ","#&");
     content = content.replaceAll("120000 ","#&");
     content = content.replaceAll("\x00","&#");
-    console.log(content);
+    //console.log(content);
     
     let take = false
     let arr = [];
