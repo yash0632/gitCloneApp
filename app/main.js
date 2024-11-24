@@ -123,14 +123,14 @@ function getLsTree(){
     content = content.replaceAll("100644","#&");
     content = content.replaceAll("100755","#&");
     content = content.replaceAll("120000","#&");
-    content = content.replaceAll("\x00","&&");
+    content = content.replaceAll("\x00","&#");
     console.log(content);
     
     let take = false
     let arr = [];
     for(let i = 0;i < content.length;i++){
       if(i==0)continue;
-      if(content[i] == "&" && content[i+1] == "&"){
+      if(content[i] == "&" && content[i+1] == "#"){
         take=false;
         treeFileName = treeFileName + "\n";
         arr.push(i);
