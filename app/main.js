@@ -76,7 +76,7 @@ async function getHashObject(){
     const fileData = fs.readFileSync(path.join(process.cwd(),fileName));
     const size = fileData.BYTES_PER_ELEMENT;
 
-    const gitData = `blob ${size}\0${fileData.toString()}`;
+    const gitData = `blob ${size}\x00${fileData.toString()}`;
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     let hashedGitFileName = await bcrypt.hash(gitData,salt);
@@ -87,9 +87,16 @@ async function getHashObject(){
 
 
     hashedGitFileName = hashedGitFileName.substring(0,40);
-    
+    var compressedData;
+    zlib.deflate(gitData,(err,buffer)=>{
+      if(err){
+        console.error('An error occurred:', err);
+        process.exitCode = 1;
+      }
+      compressedData = buffer.toString()
+    })
 
-    var compressedData = zlib.deflateSync(gitData).toString();
+    
     //console.log(__dirname);
     
     fs.mkdirSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2)),{recursive:true})
