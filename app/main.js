@@ -118,5 +118,34 @@ function getLsTree(){
 
     console.log(content);
 
+    let treeFileName = "";
+    content = content.replaceAll("40000 ","$$");
+    content = content.replaceAll("100644 ","$$");
+    content = content.replaceAll("100755 ","$$");
+    content = content.replaceAll("120000 ","$$");
+    content = content.replaceAll("\x00","&&");
+    
+    let take = false
+    let arr = [];
+    for(let i = 0;i < content.length;i++){
+      if(i==0)continue;
+      if(content[i] == "$" && content[i-1] == "$"){
+        
+        arr.push(i);
+      }
+      if(content[i] == '&' && content[i+1] == "&"){
+        
+        arr.push(i);
+      }
+    }
+
+
+    for(let i = 0;i < arr.length;i+=2){
+      treeFileName=content.substring(i,i+1);
+      treeFileName += "/n"
+    }
+
+    process.stdout.write(treeFileName);
+
   })
 }
