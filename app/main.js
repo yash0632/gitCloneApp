@@ -84,12 +84,11 @@ async function getHashObject(){
  
 
 
-    hashedGitFileName = hashedGitFileName.substring(0,40);
     var compressedData = zlib.deflateSync(gitData);
     
 
       fs.mkdirSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2)),{recursive:true})
-      fs.writeFileSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName.substring(2,40)),compressedData);
+      fs.writeFileSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName.substring(2)),compressedData);
 
 
       process.stdout.write(hashedGitFileName);
