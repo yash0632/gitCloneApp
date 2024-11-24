@@ -102,7 +102,16 @@ async function getHashObject(){
       process.stdout.write(hashedGitFileName);
 
       
-      console.log(compressedData);
+      //console.log(compressedData);
+
+      const buffer = Buffer.from(compressedData,'base64');
+      zlib.unzip(buffer,(err,buffer)=>{
+        if(err){
+          console.log("an error occured");
+          process.exit(1);
+        }
+        let data = buffer.toString();
+        console.log(data)
     })
 
     
