@@ -120,9 +120,9 @@ function getLsTree(){
 
     let treeFileName = "";
     content = content.replaceAll("\x0040000","#&");
-    content = content.replaceAll("100644","#&");
-    content = content.replaceAll("100755","#&");
-    content = content.replaceAll("120000","#&");
+    content = content.replaceAll("\x00100644","#&");
+    content = content.replaceAll("\x00100755","#&");
+    content = content.replaceAll("\x00120000","#&");
     content = content.replaceAll("\x00","&#");
     console.log(content);
     
