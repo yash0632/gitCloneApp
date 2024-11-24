@@ -129,20 +129,19 @@ function getLsTree(){
     let arr = [];
     for(let i = 0;i < content.length;i++){
       if(i==0)continue;
+      if(content[i] == "&" && content[i+1] == "&"){
+        take=false;
+        treeFileName = treeFileName + "\n";
+        arr.push(i);
+      }
+      if(take == true){
+        treeFileName = treeFileName + content[i];
+      }
       if(content[i] == "$" && content[i-1] == "$"){
-        
+        take = true;
         arr.push(i);
       }
-      if(content[i] == '&' && content[i+1] == "&"){
-        
-        arr.push(i);
-      }
-    }
-
-
-    for(let i = 0;i < arr.length;i+=2){
-      treeFileName =treeFileName + content.substring(i,i+1);
-      treeFileName = treeFileName + "/n"
+      
     }
 
     process.stdout.write(treeFileName);
