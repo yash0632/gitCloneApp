@@ -98,7 +98,7 @@ async function createHashObject(){
 
 function getLsTree(){
   const method = process.argv[3];
-  if(method != "name-only"){
+  if(method != "--name-only"){
     throw new Error("not name only");
   }
 
