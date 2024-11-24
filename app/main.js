@@ -79,7 +79,7 @@ async function getHashObject(){
 
     const gitData = `blob ${size}\x00${fileData.toString()}`;
     
-    let hashedGitFileName = crypto.createHash("sha1").update(content).digest("hex");
+    let hashedGitFileName = crypto.createHash("sha1").update(gitData).digest("hex");
     
     hashedGitFileName = hashedGitFileName.replaceAll("/","");
     hashedGitFileName = hashedGitFileName.replaceAll("$","");
