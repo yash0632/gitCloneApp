@@ -77,11 +77,9 @@ async function getHashObject(){
     const size = fileData.BYTES_PER_ELEMENT;
 
     const gitData = `blob ${size}\x00${fileData.toString()}`;
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    let hashedGitFileName = await bcrypt.hash(gitData,salt);
-    let newGitFileName = "";
-    let start = 0;
+    
+    let hashedGitFileName = crypto.createHash("sha1").update(content).digest("hex");
+    
     hashedGitFileName = hashedGitFileName.replaceAll("/","");
     hashedGitFileName = hashedGitFileName.replaceAll("$","");
 
