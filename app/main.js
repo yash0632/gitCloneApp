@@ -124,6 +124,7 @@ function getLsTree(){
     content = content.replaceAll("100755 ","$$");
     content = content.replaceAll("120000 ","$$");
     content = content.replaceAll("\x00","&&");
+    console.log(content);
     
     let take = false
     let arr = [];
