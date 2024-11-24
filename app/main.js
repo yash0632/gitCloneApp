@@ -90,11 +90,11 @@ async function getHashObject(){
     var compressedData = zlib.deflateSync(gitData).toString();
     //console.log(__dirname);
     
-    fs.mkdirSync(path.join(path.dirname(process.cwd()),".git","objects",hashedGitFileName.substring(0,2)),{recursive:true})
-    fs.writeFileSync(path.join(path.dirname(process.cwd()),".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName.substring(2,40)),compressedData);
+    fs.mkdirSync(path.join(path.dirname(path.dirname(process.cwd())),".git","objects",hashedGitFileName.substring(0,2)),{recursive:true})
+    fs.writeFileSync(path.join(path.dirname(path.dirname(process.cwd())),".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName.substring(2,40)),compressedData);
 
 
     process.stdout.write(hashedGitFileName);
-    console.log(process.cwd())
+    console.log(path.dirname(path.dirname(process.cwd())))
 
 }
