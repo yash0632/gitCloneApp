@@ -98,6 +98,6 @@ async function getHashObject(){
 
     process.stdout.write(hashedGitFileName);
     //console.log(process.cwd());
-    //console.log(path.dirname(path.dirname(process.cwd())))
+    console.log(path.dirname(path.dirname(process.cwd())))
 
 }
