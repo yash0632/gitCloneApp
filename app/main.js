@@ -81,8 +81,7 @@ async function getHashObject(){
     
     let hashedGitFileName = crypto.createHash("sha1").update(gitData).digest("hex");
     
-    hashedGitFileName = hashedGitFileName.replaceAll("/","");
-    hashedGitFileName = hashedGitFileName.replaceAll("$","");
+ 
 
 
     hashedGitFileName = hashedGitFileName.substring(0,40);
