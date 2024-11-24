@@ -3,6 +3,7 @@ const path = require("path");
 const zlib = require("zlib")
 const bcrypt = require("bcrypt")
 const crypto = require("crypto");
+const { fileURLToPath } = require("url");
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 console.error("Logs from your program will appear here!");
@@ -77,7 +78,7 @@ async function getHashObject(){
     const fileData = fs.readFileSync(path.join(process.cwd(),fileName));
     const size = fileData.BYTES_PER_ELEMENT;
 
-    const gitData = `blob ${size}\0${fileData.toString()}`;
+    const gitData = `blob ${fs.statSync(fileName)}\0${fileData.toString()}`;
     
     let hashedGitFileName = crypto.createHash("sha1").update(gitData).digest("hex");
     
