@@ -94,14 +94,15 @@ async function getHashObject(){
         process.exitCode = 1;
       }
       compressedData = buffer.toString('base64')
+
       fs.mkdirSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2)),{recursive:true})
       fs.writeFileSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName.substring(2,40)),compressedData);
 
 
       process.stdout.write(hashedGitFileName);
 
-      const data = fs.readFileSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName.substring(2,40),compressedData));
-      console.log(data);
+      
+      console.log(compressedData);
     })
 
     
