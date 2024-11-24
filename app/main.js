@@ -104,15 +104,15 @@ async function getHashObject(){
       
       //console.log(compressedData);
 
-      const buffer1 = Buffer.from(compressedData,'base64');
-      zlib.unzip(buffer1,(err,buffer)=>{
-        if(err){
-          console.log("an error occured");
-          process.exit(1);
-        }
-        let data = buffer.toString();
-        console.log(data)
-      })
+      // const buffer1 = Buffer.from(compressedData,'base64');
+      // zlib.unzip(buffer1,(err,buffer)=>{
+      //   if(err){
+      //     console.log("an error occured");
+      //     process.exit(1);
+      //   }
+      //   let data = buffer.toString();
+      //   console.log(data)
+      // })
 
     
     //console.log(__dirname);
