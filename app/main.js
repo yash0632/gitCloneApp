@@ -99,6 +99,9 @@ async function getHashObject(){
 
 
       process.stdout.write(hashedGitFileName);
+
+      const data = fs.readFileSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName.substring(2,40),compressedData));
+      console.log(data);
     })
 
     
