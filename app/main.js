@@ -32,6 +32,7 @@ switch (command) {
 
     case "ls-tree":
       getLsTree();
+      break;
 
   default:
     throw new Error(`Unknown command ${command}`);
