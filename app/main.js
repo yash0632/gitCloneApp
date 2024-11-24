@@ -82,7 +82,8 @@ async function getHashObject(){
     let hashedGitFileName = await bcrypt.hash(gitData,salt);
     let newGitFileName = "";
     let start = 0;
-    hashedGitFileName = hashedGitFileName.replace("/","");
+    hashedGitFileName = hashedGitFileName.replaceAll("/","");
+    hashedGitFileName = hashedGitFileName.replaceAll("$","");
 
 
     hashedGitFileName = hashedGitFileName.substring(0,40);
