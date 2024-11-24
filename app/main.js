@@ -27,8 +27,11 @@ switch (command) {
 
     case "hash-object":
         
-        getHashObject();
+        createHashObject();
         break;
+
+    case "ls-tree":
+      getLsTree();
 
   default:
     throw new Error(`Unknown command ${command}`);
@@ -68,7 +71,7 @@ function getBlob(shadb,shafile){
     })
   }
 
-async function getHashObject(){
+async function createHashObject(){
     const write = process.argv[3];
     if(write != "-w"){
         throw new Error(`Unknown Command ${write}`)
@@ -82,37 +85,37 @@ async function getHashObject(){
     
     let hashedGitFileName = crypto.createHash("sha1").update(gitData).digest("hex");
     
- 
-
-
     var compressedData = zlib.deflateSync(gitData);
     
 
-      fs.mkdirSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2)),{recursive:true})
-      fs.writeFileSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName.substring(2)),compressedData);
+    fs.mkdirSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2)),{recursive:true})
+    fs.writeFileSync(path.join(process.cwd(),".git","objects",hashedGitFileName.substring(0,2),hashedGitFileName.substring(2)),compressedData);
 
 
-      process.stdout.write(hashedGitFileName);
+    process.stdout.write(hashedGitFileName);
+}
 
-      
-      //console.log(compressedData);
 
-      // const buffer1 = Buffer.from(compressedData,'base64');
-      // zlib.unzip(buffer1,(err,buffer)=>{
-      //   if(err){
-      //     console.log("an error occured");
-      //     process.exit(1);
-      //   }
-      //   let data = buffer.toString();
-      //   console.log(data)
-      // })
+function getLsTree(){
+  const method = process.argv[3];
+  if(method != "name-only"){
+    throw new Error("not name only");
+  }
 
-    
-    //console.log(__dirname);
-    
-    
-    //console.log(process.cwd());
-    //console.log(path.dirname(path.dirname(process.cwd())))
-  
+  const tree_sha = process.argv[4];
+  const zipContent = fs.readFileSync(path.join(process.cwd(),".git","objects",tree_sha.substring(0,2),tree_sha.substring(2)));
 
+
+  let content;
+  const buffer = Buffer.from(zipContent,"base64");
+  zlib.unzip(buffer,(err,buffer)=>{
+    if(err){
+      console.log("an error occured");
+      process.exitCode = 1;
+    }
+    content = buffer.toString();
+
+    console.log(content);
+
+  })
 }
