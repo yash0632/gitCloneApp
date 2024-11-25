@@ -177,7 +177,7 @@ function dirTreeSha(directory){
     }
     else{
       let newDirectory = path.join(directory,directoryFiles[i]);
-      let dirHash = dirTreeSha(directory);
+      let dirHash = dirTreeSha(newDirectory);
       treeContent = treeContent + `40000 ${directoryFiles[i]}\0${dirHash[1]}\n`
     }
   }
@@ -211,7 +211,6 @@ function createTree(){
 
 
   //first goes to end
-  const fileData = fs.readdirSync(process.cwd())
   const dirHash = dirTreeSha(process.cwd());
   process.stdout.write(dirHash[0]);
 }
