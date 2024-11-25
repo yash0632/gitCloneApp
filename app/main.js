@@ -196,8 +196,8 @@ function dirTreeSha(directory){
       
     }
   }
-  
-  treeContent = `tree ${directory.length}\x00` + treeContent;
+  const treeSize = Buffer.byteLength(treeContent);
+  treeContent = `tree ${treeSize}\x00` + treeContent;
   const dirHashHex = crypto.createHash('sha1').update(treeContent).digest('hex');
   const compressedtreeContent = zlib.deflateSync(treeContent);
   fs.mkdirSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2)));
