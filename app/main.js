@@ -3,6 +3,7 @@ const path = require("path");
 const zlib = require("zlib")
 
 const crypto = require("crypto");
+const getFolderSize = require('get-folder-size');
 
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -159,10 +160,12 @@ function getLsTree(){
   })
 }
 
-function dirTreeSha(directory){
+async function dirTreeSha(directory){
   const directoryFiles = fs.readdirSync(directory);
   let treeContent = ``;
-  let size = 0;
+  
+  const myFolder = directory;
+  const size = await getFolderSize.loose(myFolder);
   for(let i = 0;i < directoryFiles.length;i++){
     if(directoryFiles[i]=='.git'){
       continue;
@@ -180,13 +183,13 @@ function dirTreeSha(directory){
 
       const hashShaWithoutHex = crypto.createHash('sha1').update(gitData).digest()
       treeContent = treeContent + `${directoryFiles[i].includes('.sh') ? '100755' : '100644'} ${directoryFiles[i]}\0${hashShaWithoutHex}`
-      size += fs.statSync(path.join(directory,directoryFiles[i])).size;
+      //size += fs.statSync(path.join(directory,directoryFiles[i])).size;
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
       let newDirectory = path.join(directory,directoryFiles[i]);
       let dirHash = dirTreeSha(newDirectory);
       treeContent = treeContent + `40000 ${directoryFiles[i]}\0${dirHash[1]}`
-      size += dirHash[2];
+      //size += dirHash[2];
     }
   }
   treeContent = `tree ${size}\0` + treeContent;
