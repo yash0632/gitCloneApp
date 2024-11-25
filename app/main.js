@@ -167,6 +167,7 @@ function dirTreeSha(directory){
       continue;
     }
     else if(fs.statSync(directoryFiles[i]).size != 0){
+      console.log(directory);
       console.log(directoryFiles[i])
       const fileContent = fs.readFileSync(path.join(directory,directoryFiles[i]));
       //hash create
