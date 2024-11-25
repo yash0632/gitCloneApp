@@ -168,7 +168,7 @@ function dirTreeSha(directory){
   
   for(let i = 0;i < directoryFiles.length;i++){
     //console.log(directory,"->",directoryFiles[i])
-    if(directoryFiles[i]=='.git'){
+    if(directoryFiles[i]=='.git' || directoryFiles[i] == "main.js"){
       continue;
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == false){
