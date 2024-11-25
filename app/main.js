@@ -3,7 +3,7 @@ import path from "path";
 import zlib from "zlib"
 
 import crypto from "crypto";
-import getFolderSize from 'get-folder-size';
+
 
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -160,11 +160,11 @@ function getLsTree(){
   })
 }
 
-async function dirTreeSha(directory){
+function dirTreeSha(directory){
   const directoryFiles = fs.readdirSync(directory);
   let treeContent = ``;
   
-  const myFolder = directory;
+  let size = 0;
   
   for(let i = 0;i < directoryFiles.length;i++){
     if(directoryFiles[i]=='.git'){
@@ -183,16 +183,16 @@ async function dirTreeSha(directory){
 
       const hashShaWithoutHex = crypto.createHash('sha1').update(gitData).digest()
       treeContent = treeContent + `${directoryFiles[i].includes('.sh') ? '100755' : '100644'} ${directoryFiles[i]}\0${hashShaWithoutHex}`
-      //size += fs.statSync(path.join(directory,directoryFiles[i])).size;
+      size += fs.statSync(path.join(directory,directoryFiles[i])).size;
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
       let newDirectory = path.join(directory,directoryFiles[i]);
       let dirHash = dirTreeSha(newDirectory);
       treeContent = treeContent + `40000 ${directoryFiles[i]}\0${dirHash[1]}`
-      //size += dirHash[2];
+      size += dirHash[2];
     }
   }
-  const size = await getFolderSize.loose(myFolder)
+  
   treeContent = `tree ${size}\0` + treeContent;
   const dirHashHex = crypto.createHash('sha1').update(treeContent).digest('hex');
   const compressedtreeContent = zlib.deflateSync(treeContent);
@@ -207,7 +207,7 @@ async function dirTreeSha(directory){
 
 }
 //dirHash=[dirHashHex,dirHashWithoutHex]
-async function createTree(){
+function createTree(){
   /*
     tree->blob
           tree->blob
@@ -226,7 +226,7 @@ async function createTree(){
 
 
   //first goes to end
-  const dirHash =await dirTreeSha(process.cwd());
+  const dirHash = dirTreeSha(process.cwd());
   process.stdout.write(dirHash[0]);
 }
 
