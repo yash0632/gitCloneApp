@@ -190,9 +190,9 @@ function dirTreeSha(directory){
       let newDirectory = path.join(directory,directoryFiles[i]);
       let dirHash = dirTreeSha(newDirectory);
       treeContent = treeContent + `40000 ${directoryFiles[i]}\0${dirHash[1]}`
-      if(directoryFiles[i] != 'node_modules'){
-        size += dirHash[2];
-      }
+      
+      size += dirHash[2];
+    
       
     }
   }
