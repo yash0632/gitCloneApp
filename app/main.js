@@ -171,7 +171,7 @@ function dirTreeSha(directory){
 
       const fileContent = fs.readFileSync(path.join(directory,directoryFiles[i]));
       //hash create
-      const gitData = `blob ${fs.statSync(directoryFiles[i]).size}\0${fileContent}`
+      const gitData = `blob ${fs.statSync(path.join(directory,directoryFiles[i])).size}\0${fileContent}`
       const hash = crypto.createHash('sha1').update(gitData).digest('hex');
       const compressedGitData = zlib.deflateSync(gitData);
       fs.mkdirSync(path.join(process.cwd(),".git","objects",hash.substring(0,2)));
