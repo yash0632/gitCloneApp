@@ -167,6 +167,7 @@ function dirTreeSha(directory){
   let size = 0;
   
   for(let i = 0;i < directoryFiles.length;i++){
+    console.log(directory,"->",directoryFiles[i])
     if(directoryFiles[i]=='.git'){
       continue;
     }
