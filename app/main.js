@@ -166,9 +166,8 @@ function dirTreeSha(directory){
     if(directoryFiles[i]=='.git'){
       continue;
     }
-    else if(fs.statSync(directoryFiles[i]).isDirectory == false){
-      console.log(directory);
-      console.log(directoryFiles[i])
+    else if(fs.statSync(directoryFiles[i]).isDirectory() == false){
+      
 
       const fileContent = fs.readFileSync(path.join(directory,directoryFiles[i]));
       //hash create
