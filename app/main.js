@@ -189,7 +189,7 @@ function dirTreeSha(directory){
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
       let newDirectory = path.join(directory,directoryFiles[i]);
       let dirHash = dirTreeSha(newDirectory);
-      treeContent = treeContent + `40000 ${directoryFiles[i]}\x00${dirHash[1]}`
+      treeContent = treeContent + `40000 ${directory.length}\x00${dirHash[1]}`
       
       size += dirHash[2];
     
