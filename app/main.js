@@ -163,7 +163,7 @@ function dirTreeSha(directory){
   const directoryFiles = fs.readdirSync(directory);
   let treeContent = `tree ${fs.statSync(directory).size}\0\n`;
   for(let i = 0;i < directoryFiles.length;i++){
-    if(directoryFiles[i]=='git'){
+    if(directoryFiles[i]=='.git'){
       continue;
     }
     else if(fs.statSync(directoryFiles[i]).size != 0){
