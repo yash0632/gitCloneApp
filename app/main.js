@@ -160,12 +160,12 @@ function getLsTree(){
   })
 }
 
-async function dirTreeSha(directory){
+function dirTreeSha(directory){
   const directoryFiles = fs.readdirSync(directory);
   let treeContent = ``;
   
   const myFolder = directory;
-  const size = await getFolderSize.loose(myFolder);
+  
   for(let i = 0;i < directoryFiles.length;i++){
     if(directoryFiles[i]=='.git'){
       continue;
@@ -192,14 +192,18 @@ async function dirTreeSha(directory){
       //size += dirHash[2];
     }
   }
-  treeContent = `tree ${size}\0` + treeContent;
+  getFolderSize.loose(myFolder).then((size)=>{
+    treeContent = `tree ${size}\0` + treeContent;
+    const dirHashHex = crypto.createHash('sha1').update(treeContent).digest('hex');
+    const compressedtreeContent = zlib.deflateSync(treeContent);
+    fs.mkdirSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2)));
+    fs.writeFileSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2),dirHashHex.substring(2)),compressedtreeContent);
+    const dirHashWithoutHex = crypto.createHash('sha1').update(treeContent).digest();
+    return [dirHashHex,dirHashWithoutHex,size];
+  })
+  
 
-  const dirHashHex = crypto.createHash('sha1').update(treeContent).digest('hex');
-  const compressedtreeContent = zlib.deflateSync(treeContent);
-  fs.mkdirSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2)));
-  fs.writeFileSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2),dirHashHex.substring(2)),compressedtreeContent);
-  const dirHashWithoutHex = crypto.createHash('sha1').update(treeContent).digest();
-  return [dirHashHex,dirHashWithoutHex,size];
+  
 
 
 }
