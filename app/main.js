@@ -166,7 +166,7 @@ function dirTreeSha(directory){
     if(directoryFiles[i]=='.git'){
       continue;
     }
-    else if(fs.statSync(directoryFiles[i]).isDirectory() == false){
+    else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == false){
       
 
       const fileContent = fs.readFileSync(path.join(directory,directoryFiles[i]));
@@ -180,7 +180,7 @@ function dirTreeSha(directory){
       const hashShaWithoutHex = crypto.createHash('sha1').update(gitData).digest()
       treeContent = treeContent + `${directoryFiles[i].includes('.sh') ? '100755' : '100644'} ${directoryFiles[i]}\0${hashShaWithoutHex}\n`
     }
-    else{
+    else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
       let newDirectory = path.join(directory,directoryFiles[i]);
       let dirHash = dirTreeSha(newDirectory);
       treeContent = treeContent + `40000 ${directoryFiles[i]}\0${dirHash[1]}\n`
