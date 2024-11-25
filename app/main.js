@@ -168,7 +168,7 @@ function dirTreeSha(directory){
   
   for(let i = 0;i < directoryFiles.length;i++){
     //console.log(directory,"->",directoryFiles[i])
-    if(directoryFiles[i]=='.git' || directoryFiles[i] == "main.js"){
+    if(directoryFiles[i]=='.git'){
       continue;
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == false){
@@ -212,23 +212,6 @@ function dirTreeSha(directory){
 }
 //dirHash=[dirHashHex,dirHashWithoutHex]
 function createTree(){
-  /*
-    tree->blob
-          tree->blob
-    tree->blob
-          blob
-    blob
-    blob
-    blob
-    blob
-
-    tree <size>/0
-      40000 .codecrafters\0<shawithouthex>
-        
-      100644 .gitattributes\0<sha>
-   */
-
-
   //first goes to end
   const dirHash = dirTreeSha(process.cwd());
   process.stdout.write(dirHash[0]);
