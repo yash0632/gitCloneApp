@@ -164,6 +164,7 @@ function dirTreeSha(directory){
   let treeContent = `tree ${fs.statSync(directory).size}\0\n`;
   for(let i = 0;i < directoryFiles.length;i++){
     if(fs.statSync(directoryFiles[i]).size != 0){
+      console.log(directoryFiles[i])
       const fileContent = fs.readFileSync(path.join(directory,directoryFiles[i]));
       //hash create
       const gitData = `blob ${fs.statSync(directoryFiles[i]).size}\0${fileContent}`
