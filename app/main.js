@@ -1,9 +1,9 @@
-const fs = require("fs");
-const path = require("path");
-const zlib = require("zlib")
+import fs from "fs";
+import path from "path";
+import zlib from "zlib"
 
-const crypto = require("crypto");
-const getFolderSize = require('get-folder-size');
+import crypto from "crypto";
+import getFolderSize from 'get-folder-size';
 
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
