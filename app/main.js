@@ -62,28 +62,12 @@ function createGitDirectory() {
 
 function getBlob(shadb,shafile){
   
-    const zipfile = fs.readFileSync(path.join(process.cwd(),".git","objects",shadb,shafile));
-    const buffer = Buffer.from(zipfile,'base64');
-    zlib.unzip(buffer,(err,buffer)=>{
-      if(err){
-        console.log("an error occured");
-        process.exit(1);
-      }
-      let data = buffer.toString();
-      data = data.replace("\x00","|")
-      let index = 0;
-      for(let i = 0;i < data.length;i++){
-        if(data[i] == '|'){
-            index = i;
-            break;
-        }
-      }
+    const hash = shadb + shafile;
       
-      let correctData = data.substring(index+1,data.length);
-      
-      process.stdout.write(correctData);
-      
-    })
+    const content = fs.readFileSync(path.join(process.cwd(), ".git", "objects", hash.slice(0, 2), hash.slice(2)));
+    const dataUnzipped = zlib.inflateSync(content);
+    const res = dataUnzipped.toString().split("\0")[1];
+    process.stdout.write(res);
   }
 
 async function createHashObject(){
