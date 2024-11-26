@@ -204,7 +204,8 @@ function dirTreeSha(directory){
       
       //const mode = 100644
       entries.push({mode:100644,name:directoryFiles[i] ,hash})
-      size += Buffer.from(`100644 ${directoryFiles[i]}\0${hash}`).length;
+      size += Buffer.from(`100644 ${directoryFiles[i]}\0`).length;
+      size += Buffer.from(hash,'hex').length;
 
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
