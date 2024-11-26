@@ -203,7 +203,7 @@ function dirTreeSha(directory){
       
       
       //const mode = 100644
-      //entries.push({mode:100644,name:directoryFiles[i] ,hash})
+      entries.push({mode:100644,name:directoryFiles[i] ,hash})
       size += `100644 ${directoryFiles[i]}\0${hashNotHex}`.length;
 
     }
@@ -213,7 +213,7 @@ function dirTreeSha(directory){
 
       const hashNotHex = crypto.createHash('sha1').update(dirHash).digest();
       size += `40000 ${directoryFiles[i]}\0${hashNotHex}`.length;
-      //entries.push({mode:40000,name:directoryFiles[i],hash:dirHash});
+      entries.push({mode:40000,name:directoryFiles[i],hash:dirHash});
     }
   }
   const treeData = entries.reduce((acc,{mode,name,hash}) => {
