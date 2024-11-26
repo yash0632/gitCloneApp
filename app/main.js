@@ -160,12 +160,18 @@ function getLsTree(){
   })
 }
 
-function calculateTreeSize(entries){
-  return entries.reduce((total,entry)=>{
-     const entryBuffer = entry.length;
-      return total + entryBuffer;
-  },0)
+function calculateTreeSize(tree){
+  const treeSize =  tree.reduce((acc,{mode, name, hash})=>
+    Buffer.concat([
+        acc,
+        Buffer.from(`${mode} ${name}\0`),
+        Buffer.from(hash , 'binary'),
+    ])
+  ,Buffer.alloc(0));
+  return treeSize;
 }
+
+
 
 function dirTreeSha(directory){
   const directoryFiles = fs.readdirSync(directory);
@@ -193,7 +199,8 @@ function dirTreeSha(directory){
       const hashShaWithoutHex = crypto.createHash('sha1').update(gitData).digest()
       treeContent = treeContent + `${directoryFiles[i].includes('.sh') ? '100755' : '100644'} ${directoryFiles[i]}\x00${hashShaWithoutHex}`
       
-      entries.push(`${directoryFiles[i].includes('.sh') ? '100755' : '100644'} ${directoryFiles[i]}\x00${hashShaWithoutHex}`)
+      const mode = directoryFiles[i].includes('.sh') ? 100755 : 100644
+      entries.push({mode,name:directoryFiles[i] ,hash})
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
       let newDirectory = path.join(directory,directoryFiles[i]);
@@ -201,7 +208,7 @@ function dirTreeSha(directory){
       treeContent = treeContent + `40000 ${directory[i]}\x00${dirHash[1]}`
       
       size += dirHash[2];
-      entries.push(`40000 ${directory[i]}\x00${dirHash[1]}`)
+      entries.push({mode:40000,name:directoryFiles[i],hash:dirHash[0]});
       
     }
   }
