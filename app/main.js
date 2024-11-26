@@ -61,7 +61,7 @@ function createGitDirectory() {
 }
 
 function getBlob(shadb,shafile){
-  console.log("raj")
+  
     const zipfile = fs.readFileSync(path.join(process.cwd(),".git","objects",shadb,shafile));
     const buffer = Buffer.from(zipfile,'base64');
     zlib.unzip(buffer,(err,buffer)=>{
