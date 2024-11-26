@@ -39,7 +39,7 @@ switch (command) {
       createTree();
       break;
 
-    case "commit-object":
+    case "commit":
       commitObject();
       break;
 
