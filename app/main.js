@@ -164,16 +164,7 @@ function getLsTree(){
   })
 }
 
-function calculateTreeSize(tree){
-  const treeSize =  tree.reduce((acc,{mode, name, hash})=>
-    Buffer.concat([
-        acc,
-        Buffer.from(`${mode} ${name}\0`),
-        Buffer.from(hash , 'binary'),
-    ])
-  ,Buffer.alloc(0));
-  return treeSize;
-}
+
 
 
 
