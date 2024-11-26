@@ -29,20 +29,20 @@ switch (command) {
     //console.log("sha is",sha);
     break;
 
-    case "hash-object":
+  case "hash-object":
         
         createHashObject();
         break;
 
-    case "ls-tree":
+  case "ls-tree":
       getLsTree();
       break;
 
-    case "write-tree":
-      createTree();
+  case "write-tree":
+    createTree();
       break;
 
-    case "commit-tree":
+  case "commit-tree":
       commitObject();
       break;
 
@@ -61,6 +61,7 @@ function createGitDirectory() {
 }
 
 function getBlob(shadb,shafile){
+  console.log("raj")
     const zipfile = fs.readFileSync(path.join(process.cwd(),".git","objects",shadb,shafile));
     const buffer = Buffer.from(zipfile,'base64');
     zlib.unzip(buffer,(err,buffer)=>{
@@ -79,7 +80,7 @@ function getBlob(shadb,shafile){
       }
       
       let correctData = data.substring(index+1,data.length);
-      console.log("raj")
+      
       process.stdout.write(correctData);
       
     })
@@ -261,7 +262,7 @@ function commitObject(){
     Buffer.from(`parent ${parentCommitSha}\n`),
     Buffer.from(`author The Commiter <thecommitter@test.com> ${Date.now} +0000\n`),
     Buffer.from(`commiter The Commiter <thecommitter@test.com> ${Date.now} +0000\n`),
-    Buffer.from(`${message}\n`)
+    Buffer.from(`message ${message}\n`)
   ])
 
   const commitBuffer = Buffer.concat([
