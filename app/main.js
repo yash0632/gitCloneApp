@@ -179,6 +179,7 @@ function dirTreeSha(directory){
   
   
   let entries = [];
+  let size = 0;
   
   for(let i = 0;i < directoryFiles.length;i++){
     //console.log(directory,"->",directoryFiles[i])
@@ -197,20 +198,22 @@ function dirTreeSha(directory){
       fs.mkdirSync(path.join(process.cwd(),".git","objects",hash.substring(0,2)),{recursive:true});
 
       fs.writeFileSync(path.join(process.cwd(),".git","objects",hash.substring(0,2),hash.substring(2)),compressedGitData);
+      const hashNotHex = crypto.createHash('sha1').update(gitData).digest();
 
       
       
       //const mode = 100644
-      entries.push({mode:100644,name:directoryFiles[i] ,hash})
+      //entries.push({mode:100644,name:directoryFiles[i] ,hash})
+      size += `100644 ${directoryFiles[i]}\0${hashNotHex}`.BYTES_PER_ELEMENT;
 
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
       let newDirectory = path.join(directory,directoryFiles[i]);
       let dirHash = dirTreeSha(newDirectory);
 
-      
-      
-      entries.push({mode:40000,name:directoryFiles[i],hash:dirHash});
+      const hashNotHex = crypto.createHash('sha1').update(dirHash).digest();
+      size += `40000 ${directoryFiles[i]}\0${hashNotHex}`.BYTES_PER_ELEMENT;
+      //entries.push({mode:40000,name:directoryFiles[i],hash:dirHash});
     }
   }
   const treeData = entries.reduce((acc,{mode,name,hash}) => {
@@ -221,7 +224,7 @@ function dirTreeSha(directory){
     ])
   },Buffer.alloc(0));
   const tree = Buffer.concat([
-      Buffer.from(`tree ${treeData.length}\x00`),
+      Buffer.from(`tree ${size}\x00`),
       treeData,
    ])
   //
