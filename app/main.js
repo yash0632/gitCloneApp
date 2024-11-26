@@ -214,6 +214,7 @@ function dirTreeSha(directory){
     }
   }
   const treeSize = calculateTreeSize(entries);
+  console.log(treeSize)
   treeContent = `tree ${treeSize}\x00` + treeContent;
   const dirHashHex = crypto.createHash('sha1').update(treeContent).digest('hex');
   const compressedtreeContent = zlib.deflateSync(treeContent);
