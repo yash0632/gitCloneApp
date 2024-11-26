@@ -213,7 +213,7 @@ function dirTreeSha(directory){
       let dirHash = dirTreeSha(newDirectory);
 
       //const hashNotHex = crypto.createHash('sha1').update(dirHash).digest();
-      size += Buffer.from(`40000 ${directoryFiles[i]}`).length;
+      size += Buffer.from(`40000 ${directoryFiles[i]}\0`).length;
       size += Buffer.from(dirHash,'hex').length;
       entries.push({mode:40000,name:directoryFiles[i],hash:dirHash});
     }
