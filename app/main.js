@@ -262,7 +262,7 @@ function commitObject(){
     Buffer.from(`parent ${parentCommitSha}\n`),
     Buffer.from(`author The Commiter <thecommitter@test.com> ${Date.now} +0000\n`),
     Buffer.from(`commiter The Commiter <thecommitter@test.com> ${Date.now} +0000\n\n`),
-    Buffer.from(`${message}\n`)
+    Buffer.from(`${message}`)
   ])
 
   const commitBuffer = Buffer.concat([
