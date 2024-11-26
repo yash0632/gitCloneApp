@@ -79,9 +79,9 @@ function getBlob(shadb,shafile){
       }
       
       let correctData = data.substring(index+1,data.length);
-      
-      process.stdout.write(correctData);
       console.log("raj")
+      process.stdout.write(correctData);
+      
     })
   }
 
