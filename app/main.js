@@ -162,8 +162,8 @@ function getLsTree(){
 
 function calculateTreeSize(entries){
   return entries.reduce((total,entry)=>{
-     const entryBuffer = entry.byteLength();
-      return total + entryBuffer.length;
+     const entryBuffer = entry.BYTES_PER_ELEMENT;
+      return total + entryBuffer;
   },0)
 }
 
