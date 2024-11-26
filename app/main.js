@@ -175,7 +175,7 @@ function calculateTreeSize(tree){
 
 function dirTreeSha(directory){
   const directoryFiles = fs.readdirSync(directory);
-  let treeContent = ``;
+  
   
   
   let entries = [];
@@ -194,13 +194,14 @@ function dirTreeSha(directory){
       const gitData = `blob ${fs.statSync(path.join(directory,directoryFiles[i])).size}\0${fileContent}`
       const hash = crypto.createHash('sha1').update(gitData).digest('hex');
       const compressedGitData = zlib.deflateSync(gitData);
-      fs.mkdirSync(path.join(process.cwd(),".git","objects",hash.substring(0,2)));
-      fs.writeFileSync(path.join(process.cwd(),".git","objects",hash.substring(0,2),hash.substring(2)),compressedGitData,'utf-8');
+      fs.mkdirSync(path.join(process.cwd(),".git","objects",hash.substring(0,2)),{recursive:true});
+
+      fs.writeFileSync(path.join(process.cwd(),".git","objects",hash.substring(0,2),hash.substring(2)),compressedGitData);
 
       
       
-      const mode = 100644
-      entries.push({mode,name:directoryFiles[i] ,hash})
+      //const mode = 100644
+      entries.push({mode:100644,name:directoryFiles[i] ,hash})
 
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
@@ -209,10 +210,16 @@ function dirTreeSha(directory){
 
       
       
-      entries.push({mode:40000,name:directoryFiles[i],hash:dirHash[0]});
+      entries.push({mode:40000,name:directoryFiles[i],hash:dirHash});
     }
   }
-  const treeData = calculateTreeSize(entries);
+  const treeData = entries.reduce((acc,{mode,name,hash}) => {
+    return Buffer.concat([
+      acc,
+      Buffer.from(`${mode} ${name}\0`),
+      Buffer.from(hash,'hex'),
+    ])
+  },Buffer.alloc(0));
   const tree = Buffer.concat([
       Buffer.from(`tree ${treeData.length}\x00`),
       treeData,
@@ -224,7 +231,7 @@ function dirTreeSha(directory){
   fs.mkdirSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2)),{recursive:true});
   fs.writeFileSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2),dirHashHex.substring(2)),compressedtreeContent);
   
-  return [dirHashHex];
+  return dirHashHex;
   
 
   
@@ -234,7 +241,7 @@ function dirTreeSha(directory){
 //dirHash=[dirHashHex,dirHashWithoutHex]
 function createTree(){
   //first goes to end
-  const dirHash = dirTreeSha(process.cwd());
+  const dirHash = dirTreeSha('./');
   process.stdout.write(dirHash[0]);
 }
 
