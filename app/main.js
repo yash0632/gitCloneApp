@@ -183,7 +183,7 @@ function dirTreeSha(directory){
   for(let i = 0;i < directoryFiles.length;i++){
     //console.log(directory,"->",directoryFiles[i])
     if(directoryFiles[i]=='.git'){
-      
+
       continue;
 
     }
@@ -211,7 +211,6 @@ function dirTreeSha(directory){
       
       size += dirHash[2];
       entries.push({mode:40000,name:directoryFiles[i],hash:dirHash[0]});
-      
     }
   }
   const treeSize = calculateTreeSize(entries);
