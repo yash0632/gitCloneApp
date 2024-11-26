@@ -213,11 +213,15 @@ function dirTreeSha(directory){
       entries.push({mode:40000,name:directoryFiles[i],hash:dirHash[0]});
     }
   }
-  const treeSize = calculateTreeSize(entries);
+  const treeData = calculateTreeSize(entries);
+  const tree = Buffer.concat([
+      Buffer.from(`tree ${treeData.length}\x00`),
+      treeData,
+   ])
   //
-  treeContent = `tree ${treeSize.length}\x00` + treeContent;
-  const dirHashHex = crypto.createHash('sha1').update(treeContent).digest('hex');
-  const compressedtreeContent = zlib.deflateSync(treeContent);
+  //treeContent = `tree ${treeData.length}\x00` + treeContent;
+  const dirHashHex = crypto.createHash('sha1').update(tree).digest('hex');
+  const compressedtreeContent = zlib.deflateSync(tree);
   fs.mkdirSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2)),{recursive:true});
   fs.writeFileSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2),dirHashHex.substring(2)),compressedtreeContent);
   const dirHashWithoutHex = crypto.createHash('sha1').update(treeContent).digest();
