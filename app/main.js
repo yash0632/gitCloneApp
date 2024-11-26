@@ -39,6 +39,10 @@ switch (command) {
       createTree();
       break;
 
+    case "commit-object":
+      commitObject();
+      break;
+
   default:
     throw new Error(`Unknown command ${command}`);
 }
@@ -232,6 +236,7 @@ function dirTreeSha(directory){
   //
   //treeContent = `tree ${treeData.length}\x00` + treeContent;
   const dirHashHex = crypto.createHash('sha1').update(tree).digest('hex');
+  
   const compressedtreeContent = zlib.deflateSync(tree);
   fs.mkdirSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2)),{recursive:true});
   fs.writeFileSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2),dirHashHex.substring(2)),compressedtreeContent);
@@ -250,18 +255,28 @@ function createTree(){
   process.stdout.write(dirHash);
 }
 
-/*
-
-tree->blob
-      blob
-      tree->blob
-blob
-blob
-tree->blob
-      tree->tree->blob
-                  blob
-blob
+function commitObject(){
+  const treeSha = process.argv[3];
+  const parentCommitSha = process.argv.slice(process.argv.indexOf('-p'),process.argv.indexOf('-p')+2)[1];
+  const message = process.argv.slice(process.argv.indexOf('-m'), process.argv.indexOf('-m')+2)[1];
 
 
+  const commitContentBuffer = Buffer.concat([
+    Buffer.from(`tree ${treeSha}\n`),
+    Buffer.from(`parent ${parentCommitSha}\n`),
+    Buffer.from(`author The Commiter <thecommitter@test.com> ${Date.now} +0000\n`),
+    Buffer.from(`commiter The Commiter <thecommitter@test.com> ${Date.now} +0000\n\n`),
+    Buffer.from(`${message}\n`)
+  ])
 
-*/
+  const commitBuffer = Buffer.concat([
+    Buffer.from(`commit ${commitContentBuffer.length}\0`),
+    commitContentBuffer
+  ])
+
+  const commitHash = crypto.createHash('sha1').update(commitBuffer).digest('hex');
+  const zipCommit = zlib.deflateSync(commitBuffer);
+  fs.mkdirSync(path.join(process.cwd(),'.git','objects',commitHash.substring(0,2)),{recursive:true});
+  fs.writeFileSync(path.join(process.cwd(),'.git','objects',commitHash.substring(0,2),commitHash.substring(2)),zipCommit);
+  process.stdout.write(commitHash);
+}
