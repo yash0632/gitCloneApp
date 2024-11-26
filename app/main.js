@@ -242,7 +242,7 @@ function dirTreeSha(directory){
 function createTree(){
   //first goes to end
   const dirHash = dirTreeSha('./');
-  process.stdout.write(dirHash[0]);
+  process.stdout.write(dirHash);
 }
 
 /*
