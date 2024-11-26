@@ -183,11 +183,12 @@ function dirTreeSha(directory){
   for(let i = 0;i < directoryFiles.length;i++){
     //console.log(directory,"->",directoryFiles[i])
     if(directoryFiles[i]=='.git'){
+      
       continue;
+
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == false){
       
-
       const fileContent = fs.readFileSync(path.join(directory,directoryFiles[i]));
       //hash create
       const gitData = `blob ${fs.statSync(path.join(directory,directoryFiles[i])).size}\x00${fileContent}`
@@ -201,6 +202,7 @@ function dirTreeSha(directory){
       
       const mode = directoryFiles[i].includes('.sh') ? 100755 : 100644
       entries.push({mode,name:directoryFiles[i] ,hash})
+
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
       let newDirectory = path.join(directory,directoryFiles[i]);
