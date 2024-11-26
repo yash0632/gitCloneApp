@@ -261,8 +261,8 @@ function commitObject(){
     Buffer.from(`tree ${treeSha}\n`),
     Buffer.from(`parent ${parentCommitSha}\n`),
     Buffer.from(`author The Commiter <thecommitter@test.com> ${Date.now} +0000\n`),
-    Buffer.from(`commiter The Commiter <thecommitter@test.com> ${Date.now} +0000\n`),
-    Buffer.from(`message ${message}\n`)
+    Buffer.from(`commiter The Commiter <thecommitter@test.com> ${Date.now} +0000\n\n`),
+    Buffer.from(`${message}\n`)
   ])
 
   const commitBuffer = Buffer.concat([
