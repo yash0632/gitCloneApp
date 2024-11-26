@@ -177,7 +177,7 @@ function dirTreeSha(directory){
   const directoryFiles = fs.readdirSync(directory);
   let treeContent = ``;
   
-  let size = 0;
+  
   let entries = [];
   
   for(let i = 0;i < directoryFiles.length;i++){
@@ -191,25 +191,24 @@ function dirTreeSha(directory){
       
       const fileContent = fs.readFileSync(path.join(directory,directoryFiles[i]));
       //hash create
-      const gitData = `blob ${fs.statSync(path.join(directory,directoryFiles[i])).size}\x00${fileContent}`
+      const gitData = `blob ${fs.statSync(path.join(directory,directoryFiles[i])).size}\0${fileContent}`
       const hash = crypto.createHash('sha1').update(gitData).digest('hex');
       const compressedGitData = zlib.deflateSync(gitData);
       fs.mkdirSync(path.join(process.cwd(),".git","objects",hash.substring(0,2)));
-      fs.writeFileSync(path.join(process.cwd(),".git","objects",hash.substring(0,2),hash.substring(2)),compressedGitData);
+      fs.writeFileSync(path.join(process.cwd(),".git","objects",hash.substring(0,2),hash.substring(2)),compressedGitData,'utf-8');
 
-      const hashShaWithoutHex = crypto.createHash('sha1').update(gitData).digest()
-      treeContent = treeContent + `${directoryFiles[i].includes('.sh') ? '100755' : '100644'} ${directoryFiles[i]}\x00${hashShaWithoutHex}`
       
-      const mode = directoryFiles[i].includes('.sh') ? 100755 : 100644
+      
+      const mode = 100644
       entries.push({mode,name:directoryFiles[i] ,hash})
 
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
       let newDirectory = path.join(directory,directoryFiles[i]);
       let dirHash = dirTreeSha(newDirectory);
-      treeContent = treeContent + `40000 ${directory[i]}\x00${dirHash[1]}`
+
       
-      size += dirHash[2];
+      
       entries.push({mode:40000,name:directoryFiles[i],hash:dirHash[0]});
     }
   }
@@ -224,8 +223,8 @@ function dirTreeSha(directory){
   const compressedtreeContent = zlib.deflateSync(tree);
   fs.mkdirSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2)),{recursive:true});
   fs.writeFileSync(path.join(process.cwd(),".git","objects",dirHashHex.substring(0,2),dirHashHex.substring(2)),compressedtreeContent);
-  const dirHashWithoutHex = crypto.createHash('sha1').update(treeContent).digest();
-  return [dirHashHex,dirHashWithoutHex,size];
+  
+  return [dirHashHex];
   
 
   
