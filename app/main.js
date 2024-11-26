@@ -160,11 +160,19 @@ function getLsTree(){
   })
 }
 
+function calculateTreeSize(entries){
+  return entries.reduce((total,entry)=>{
+     const entryBuffer = entry.toBuffer();
+      return total + entryBuffer.length;
+  },0)
+}
+
 function dirTreeSha(directory){
   const directoryFiles = fs.readdirSync(directory);
   let treeContent = ``;
   
   let size = 0;
+  let entries = [];
   
   for(let i = 0;i < directoryFiles.length;i++){
     //console.log(directory,"->",directoryFiles[i])
@@ -184,7 +192,8 @@ function dirTreeSha(directory){
 
       const hashShaWithoutHex = crypto.createHash('sha1').update(gitData).digest()
       treeContent = treeContent + `${directoryFiles[i].includes('.sh') ? '100755' : '100644'} ${directoryFiles[i]}\x00${hashShaWithoutHex}`
-      size += fs.statSync(path.join(directory,directoryFiles[i])).size;
+      
+      entries.push(`${directoryFiles[i].includes('.sh') ? '100755' : '100644'} ${directoryFiles[i]}\x00${hashShaWithoutHex}`)
     }
     else if(fs.statSync(path.join(directory,directoryFiles[i])).isDirectory() == true){
       let newDirectory = path.join(directory,directoryFiles[i]);
@@ -192,11 +201,11 @@ function dirTreeSha(directory){
       treeContent = treeContent + `40000 ${directory[i]}\x00${dirHash[1]}`
       
       size += dirHash[2];
-    
+      entries.push(`40000 ${directory[i]}\x00${dirHash[1]}`)
       
     }
   }
-  const treeSize = Buffer.byteLength(treeContent);
+  const treeSize = calculateTreeSize(entries);
   treeContent = `tree ${treeSize}\x00` + treeContent;
   const dirHashHex = crypto.createHash('sha1').update(treeContent).digest('hex');
   const compressedtreeContent = zlib.deflateSync(treeContent);
