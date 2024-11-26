@@ -174,7 +174,7 @@ function calculateTreeSize(tree){
 
 
 function dirTreeSha(directory){
-  const directoryFiles = fs.readdirSync(directory);
+  const directoryFiles = fs.readdirSync(directory).filter((file)=>file!=".git" && file != "main.js")
   
   
   
