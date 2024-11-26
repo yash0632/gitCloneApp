@@ -20,10 +20,13 @@ switch (command) {
 
   case "cat-file":
     const sha = process.argv[4];
+    
+      let shadb = sha.substring(0,2);
+      let shafile = sha.substring(2,sha.length);
+      getBlob(shadb,shafile);
+      
+    
     //console.log("sha is",sha);
-    let shadb = sha.substring(0,2);
-    let shafile = sha.substring(2,sha.length);
-    getBlob(shadb,shafile);
     break;
 
     case "hash-object":
@@ -78,6 +81,7 @@ function getBlob(shadb,shafile){
       let correctData = data.substring(index+1,data.length);
       
       process.stdout.write(correctData);
+      console.log("raj")
     })
   }
 
